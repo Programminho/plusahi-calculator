@@ -1,4 +1,32 @@
 import telebot
+import os
+from flask import Flask
+from threading import Thread
+
+# --- Добавь этот блок ---
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "I'm alive"
+
+def run():
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port)
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+# ------------------------
+
+
+
+
+
+
+
+
+import telebot
 
 bot = telebot.TeleBot ('8753456206:AAHQt0AK8bCUItVNU4ETbaGzJ-yh0g75F64')
 # Команда /start
@@ -43,5 +71,9 @@ def handle_calc(message):
         bot.reply_to(message, "так нельзя")
 
 # Запуск бота
+
+
 if __name__ == "__main__":
+    keep_alive() # <--- Обязательно добавь это перед polling
+    print("Бот запущен!")
     bot.polling(none_stop=True)
